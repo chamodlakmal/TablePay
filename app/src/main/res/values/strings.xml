@@ -2,4 +2,6 @@
     <string name="app_name">Table Pay</string>
     <string name="tables">Tables</string>
     <string name="bill_details">Bill Details #%1$d</string>
+    <string name="no_carts_available">No Carts Available.</string>
+    <string name="no_products_found">No products found in this cart.</string>
 </resources>

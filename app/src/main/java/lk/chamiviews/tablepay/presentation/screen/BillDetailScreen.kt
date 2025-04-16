@@ -58,68 +58,84 @@ fun BillDetailScreen(
                 })
         }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(cart.products.size) { index ->
-                    ProductItem(
-                        product = cart.products[index],
-                        productDetailState = productIdWiseProductDetailState[cart.products[index].id]
-                            ?: ProductDetailState.Loading
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Surface(
-                    tonalElevation = 4.dp, shadowElevation = 4.dp
+            if(cart.products.isEmpty()){
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(32.dp),
                 ) {
                     Text(
-                        text = "Total Bill Amount: ${String.format(Locale.US, "%.2f", cart.total)}",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        textAlign = TextAlign.Center
+                        text = stringResource(R.string.no_products_found), // Add this to your strings.xml
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-
-                when (markCartAsPaidState) {
-                    is MarkCartAsPaidState.Error -> {
-                        Toast.makeText(context, markCartAsPaidState.message, Toast.LENGTH_LONG)
-                            .show()
-                        ButtonWithLoading(isLoading = false, onCLick = {
-                            onEvent(BillDetailEvent.MarkAsPaid(cart.id))
-                        })
+            }else{
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    items(cart.products.size) { index ->
+                        ProductItem(
+                            product = cart.products[index],
+                            productDetailState = productIdWiseProductDetailState[cart.products[index].id]
+                                ?: ProductDetailState.Loading
+                        )
                     }
-
-                    MarkCartAsPaidState.Loading -> {
-                        ButtonWithLoading(isLoading = true, onCLick = {})
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Surface(
+                        tonalElevation = 4.dp, shadowElevation = 4.dp
+                    ) {
+                        Text(
+                            text = "Total Bill Amount: ${String.format(Locale.US, "%.2f", cart.total)}",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            textAlign = TextAlign.Center
+                        )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                    is MarkCartAsPaidState.Success -> {
-                        PaidComponent()
-                    }
+                    when (markCartAsPaidState) {
+                        is MarkCartAsPaidState.Error -> {
+                            Toast.makeText(context, markCartAsPaidState.message, Toast.LENGTH_LONG)
+                                .show()
+                            ButtonWithLoading(isLoading = false, onCLick = {
+                                onEvent(BillDetailEvent.MarkAsPaid(cart.id))
+                            })
+                        }
 
-                    MarkCartAsPaidState.Idle -> {
-                        if (cart.isPaid) {
+                        MarkCartAsPaidState.Loading -> {
+                            ButtonWithLoading(isLoading = true, onCLick = {})
+                        }
+
+                        is MarkCartAsPaidState.Success -> {
                             PaidComponent()
-                        } else {
-                            ButtonWithLoading(
-                                isLoading = markCartAsPaidState is MarkCartAsPaidState.Loading,
-                                onCLick = {
-                                    onEvent(BillDetailEvent.MarkAsPaid(cart.id))
-                                })
+                        }
+
+                        MarkCartAsPaidState.Idle -> {
+                            if (cart.isPaid) {
+                                PaidComponent()
+                            } else {
+                                ButtonWithLoading(
+                                    isLoading = markCartAsPaidState is MarkCartAsPaidState.Loading,
+                                    onCLick = {
+                                        onEvent(BillDetailEvent.MarkAsPaid(cart.id))
+                                    })
+                            }
                         }
                     }
                 }
             }
+
 
         }
     }
@@ -134,7 +150,7 @@ fun BillDetailScreenPreview() {
         Product(id = 2, price = 20.0, quantity = 1, thumbnail = "")
     )
     val cart = Cart(
-        id = 1, total = 120.0, products = products, isPaid = false
+        id = 1, total = 120.0, products = emptyList(), isPaid = false
     )
     val mockProductState = hashMapOf(
         1 to ProductDetailState.Success(ProductDetail(id = 1, title = "Product 1")),
