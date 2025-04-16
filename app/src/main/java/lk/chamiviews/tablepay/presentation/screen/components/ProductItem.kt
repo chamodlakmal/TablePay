@@ -20,8 +20,8 @@ import lk.chamiviews.tablepay.presentation.state.ProductDetailState
 fun ProductItem(product: Product, productDetailState: ProductDetailState) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(

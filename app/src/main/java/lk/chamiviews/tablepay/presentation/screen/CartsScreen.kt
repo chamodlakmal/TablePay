@@ -46,6 +46,14 @@ fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart)
                 Toast.LENGTH_LONG
             ).show()
         }
+
+        if (carts.loadState.append is LoadState.Error) {
+            Toast.makeText(
+                context,
+                "Error: " + (carts.loadState.append as LoadState.Error).error.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     Scaffold(
