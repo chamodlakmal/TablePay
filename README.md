@@ -9,6 +9,8 @@ A modern Android application developed using Kotlin and Jetpack Compose, designe
 - **Table Bill Details:** View each cart's detailed billing, including products, quantity, and total cost.
 - **Offline Caching:** Previously fetched data is cached locally using Room for offline accessibility.
 - **Modern Android Practices:** Built with Jetpack Compose, Kotlin Coroutines, and a modular MVVM structure.
+- **Clean Architecture:** Follows domain-driven modular design with separation of concerns.
+
 
 ## Screenshots
 
@@ -49,6 +51,7 @@ To run this application locally:
 - **Dagger 2:** Dependency injection.
 - **Coroutines + Flow:** For async data streams and background processing.
 - **Paging 3:** Efficient paging and caching of large datasets.
+- **Coil:** For image loading in Jetpack Compose.
 
 ## Folder Structure
 ```
@@ -68,13 +71,20 @@ TablePay/
 │-- README.md                   # Project documentation
 ```
 
-## Architecture
+## Architecture and Design Decisions
 
-This application follows the Model-View-ViewModel (MVVM) architecture:
+- **MVVM + Clean Architecture:** For better separation of concerns, testability, and maintainability. Divided into three layers: Data, Domain, and Presentation.
+- **Dagger 2:** Used for dependency injection to manage app-level and feature-level components.
+- **Paging 3 Library:** To handle large datasets efficiently and with lazy loading.
+- **Room Database:** For offline support and local caching.
+- **Retrofit:** For API calls (simulated with https://dummyjson.com).
+- **Coil:** Chosen for fast, lightweight image loading with Compose integration.
 
-- **Model:** Handles data operations, including API calls and database interactions.
-- **View:** UI components built using Jetpack Compose.
-- **ViewModel:** Manages UI-related data and handles user interactions.
+## Known Limitations / Areas for Improvement
+- **No Real Payment Integration:** Currently, "Mark as Paid" is a simulated action with local DB update.
+- **No Testing:** No unit tests or UI tests have been written for this version yet.
+- **UI/UX Enhancements:** The app follows a basic layout; animations, themes, and polish can be added.
+- **Error Handling:** Missing graceful UI for API and database failures.
 
 ## Contact
 
