@@ -19,8 +19,9 @@ A modern Android application developed using Kotlin and Jetpack Compose, designe
     <th align="center"><b>Bill Details Screen (Paid)</b></th>
   </tr>
   <tr>
-    <td><img src="" width="400"></td>
-    <td><img src="" width="400"></td>
+    <td><img src="https://github.com/chamodlakmal/TablePay/blob/main/screenshots/Table%20List.png" width="400"></td>
+    <td><img src="https://github.com/chamodlakmal/TablePay/blob/main/screenshots/Bill%20Details%20Non%20Paid.png" width="400"></td>
+    <td><img src="https://github.com/chamodlakmal/TablePay/blob/main/screenshots/Bill%20Details%20Paid.png" width="400"></td>
   </tr>
 </table>
 
