@@ -53,7 +53,7 @@ fun BillDetailScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(), topBar = {
             CommonTopAppBar(
-                title = stringResource(R.string.bill_details), showIcon = true, onClick = {
+                title = stringResource(R.string.bill_details)+" #${cart.id}", showIcon = true, onClick = {
                     onBackPress()
                 })
         }) { innerPadding ->
