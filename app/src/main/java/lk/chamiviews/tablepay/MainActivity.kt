@@ -38,9 +38,9 @@ class MainActivity : ComponentActivity() {
                         val cartViewModel = hiltViewModel<CartViewModel>()
                         val carts = cartViewModel.cartPagingFlow.collectAsLazyPagingItems()
                         CartsScreen(carts = carts, navigateToBillDetail = { cart ->
-                            val productsJson = Json.encodeToString(cart.products)
+                            val cartJson = Json.encodeToString(cart)
                             navController.navigate(
-                                BillDetailScreen(productsJson)
+                                BillDetailScreen(cartJson)
                             )
                         })
                     }
@@ -50,11 +50,12 @@ class MainActivity : ComponentActivity() {
                         val productDetailsValue =
                             billDetailViewModel.productDetailState.collectAsState()
                         BillDetailScreen(
-                            products = Json.decodeFromString(args.productsJson),
+                            cart = Json.decodeFromString(args.cartJson),
                             productIdWiseProductDetailState = productDetailsValue.value,
                             onBackPress = {
                                 navController.popBackStack()
-                            }, onEvent = billDetailViewModel::onEvent
+                            }, onEvent = billDetailViewModel::onEvent,
+                            markCartAsPaidState = billDetailViewModel.markCartAsPaidState.collectAsState().value
                         )
                     }
 
@@ -70,4 +71,4 @@ class MainActivity : ComponentActivity() {
 object CartsScreen
 
 @Serializable
-data class BillDetailScreen(val productsJson: String)
+data class BillDetailScreen(val cartJson: String)

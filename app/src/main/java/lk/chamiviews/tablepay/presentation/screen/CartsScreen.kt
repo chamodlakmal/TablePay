@@ -1,7 +1,6 @@
 package lk.chamiviews.tablepay.presentation.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,15 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +28,7 @@ import lk.chamiviews.tablepay.R
 import lk.chamiviews.tablepay.domain.model.Cart
 import lk.chamiviews.tablepay.domain.model.Product
 import lk.chamiviews.tablepay.presentation.screen.components.CartItem
+import lk.chamiviews.tablepay.presentation.screen.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,12 +55,9 @@ fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.tables))
-                }, modifier = Modifier
-                    .shadow(elevation = 2.dp)
-                    .background(Color.White)
+            CommonTopAppBar(
+                title = stringResource(R.string.tables),
+                showIcon = false
             )
         }
     ) { innerPadding ->
@@ -117,8 +110,8 @@ fun CartsScreenPreview() {
             id = 1,
             total = 120.0,
             products = listOf(
-                Product(id = 1, price = 10.0, quantity = 2),
-                Product(id = 2, price = 20.0, quantity = 1)
+                Product(id = 1, price = 10.0, quantity = 2, thumbnail = ""),
+                Product(id = 2, price = 20.0, quantity = 1, thumbnail = "")
             ),
             isPaid = false
         ),
@@ -126,7 +119,7 @@ fun CartsScreenPreview() {
             id = 2,
             total = 250.0,
             products = listOf(
-                Product(id = 3, price = 25.0, quantity = 3)
+                Product(id = 3, price = 25.0, quantity = 3, thumbnail = "")
             ),
             isPaid = true
         )

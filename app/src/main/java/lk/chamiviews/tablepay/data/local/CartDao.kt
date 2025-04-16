@@ -16,7 +16,7 @@ interface CartDao {
     suspend fun insertAll(carts: List<LocalCart>)
 
     @Query("UPDATE local_cart SET isPaid = 1 WHERE id = :id")
-    suspend fun markAsPaid(id: Int)
+    suspend fun markAsPaid(id: Int): Int
 
     @Query("DELETE FROM local_cart")
     suspend fun clearAll()

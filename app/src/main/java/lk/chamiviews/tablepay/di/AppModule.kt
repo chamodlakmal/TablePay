@@ -14,9 +14,12 @@ import lk.chamiviews.tablepay.data.local.CartDatabase
 import lk.chamiviews.tablepay.data.model.LocalCart
 import lk.chamiviews.tablepay.data.remote.ApiService
 import lk.chamiviews.tablepay.data.repository.CartRemoteMediator
+import lk.chamiviews.tablepay.data.repository.CartRepositoryImpl
 import lk.chamiviews.tablepay.data.repository.ProductRepositoryImpl
+import lk.chamiviews.tablepay.domain.repository.CartRepository
 import lk.chamiviews.tablepay.domain.repository.ProductRepository
 import lk.chamiviews.tablepay.domain.usecase.GetProductDetailUseCase
+import lk.chamiviews.tablepay.domain.usecase.MarkCartAsPaidUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -68,5 +71,13 @@ object AppModule {
     @Provides
     fun provideGetProductDetailUseCase(productRepository: ProductRepository): GetProductDetailUseCase =
         GetProductDetailUseCase(productRepository)
+
+    @Provides
+    fun provideCartRepository(cartDatabase: CartDatabase): CartRepository =
+        CartRepositoryImpl(cartDatabase)
+
+    @Provides
+    fun provideMarkAsPaidUseCase(cartRepository: CartRepository): MarkCartAsPaidUseCase =
+        MarkCartAsPaidUseCase(cartRepository)
 
 }
