@@ -6,6 +6,5 @@ import androidx.room.Entity
 data class LocalProduct(
     val id: Int,
     val price: Double,
-    val quantity: Int,
-    val thumbnail: String
+    val quantity: Int
 )

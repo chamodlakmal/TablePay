@@ -14,23 +14,29 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import kotlinx.coroutines.flow.flowOf
 import lk.chamiviews.tablepay.R
 import lk.chamiviews.tablepay.domain.model.Cart
+import lk.chamiviews.tablepay.domain.model.Product
 import lk.chamiviews.tablepay.presentation.screen.components.CartItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartsScreen(carts: LazyPagingItems<Cart>) {
+fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart) -> Unit) {
     val context = LocalContext.current
     LaunchedEffect(key1 = carts.loadState) {
         if (carts.loadState.refresh is LoadState.Error) {
@@ -47,7 +53,7 @@ fun CartsScreen(carts: LazyPagingItems<Cart>) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.carts))
+                    Text(stringResource(R.string.tables))
                 }, modifier = Modifier
                     .shadow(elevation = 2.dp)
                     .background(Color.White)
@@ -76,7 +82,9 @@ fun CartsScreen(carts: LazyPagingItems<Cart>) {
                         key = carts.itemKey { it.id }) { index ->
                         val cart = carts[index]
                         if (cart != null) {
-                            CartItem(cart = cart, onClick = {})
+                            CartItem(cart = cart, onClick = {
+                                navigateToBillDetail(cart)
+                            })
                         }
                     }
                     item {
@@ -91,4 +99,37 @@ fun CartsScreen(carts: LazyPagingItems<Cart>) {
 
     }
 
+}
+
+@Preview
+@Composable
+fun CartsScreenPreview() {
+    val sampleCarts = listOf(
+        Cart(
+            id = 1,
+            total = 120.0,
+            products = listOf(
+                Product(id = 1, price = 10.0, quantity = 2),
+                Product(id = 2, price = 20.0, quantity = 1)
+            ),
+            isPaid = false
+        ),
+        Cart(
+            id = 2,
+            total = 250.0,
+            products = listOf(
+                Product(id = 3, price = 25.0, quantity = 3)
+            ),
+            isPaid = true
+        )
+    )
+
+    val lazyPagingItems = sampleCarts.fakeLazyPagingItems()
+    CartsScreen(carts = lazyPagingItems) { }
+}
+
+@Composable
+fun <T : Any> List<T>.fakeLazyPagingItems(): LazyPagingItems<T> {
+    val pagingData = remember { PagingData.from(this) }
+    return flowOf(pagingData).collectAsLazyPagingItems()
 }

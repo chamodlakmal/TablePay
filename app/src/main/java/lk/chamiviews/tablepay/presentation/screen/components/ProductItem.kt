@@ -1,6 +1,5 @@
 package lk.chamiviews.tablepay.presentation.screen.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,16 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import lk.chamiviews.tablepay.domain.model.Cart
+import lk.chamiviews.tablepay.domain.model.Product
 
 @Composable
-fun CartItem(cart: Cart, onClick: () -> Unit) {
-
+fun ProductItem(product: Product) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
-            .clickable { onClick() },
+            .padding(top = 8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
@@ -30,22 +27,23 @@ fun CartItem(cart: Cart, onClick: () -> Unit) {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Table Id : ${cart.id}", modifier = Modifier.padding(bottom = 4.dp))
-            Text(text = "Total Bill Amount : ${cart.total}")
+            Text(
+                text = "Quantity : ${product.quantity}",
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(text = "Price : ${product.price}")
         }
 
     }
-
 }
 
 @Preview
 @Composable
-fun CartItemPreview() {
-    val cart = Cart(
+fun ProductItemPreview() {
+    val product = Product(
         id = 1,
-        total = 100.0,
-        products = emptyList(),
-        isPaid = false
+        price = 100.0,
+        quantity = 2
     )
-    CartItem(cart = cart, onClick = {})
+    ProductItem(product = product)
 }

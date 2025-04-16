@@ -22,7 +22,11 @@ class CartRemoteMediator(
 
             val skip = when (loadType) {
                 LoadType.REFRESH -> 0
-                LoadType.APPEND -> state.pages.sumOf { it.data.size }
+                LoadType.APPEND -> {
+                    val lastItem = state.lastItemOrNull()
+                    if (lastItem == null) 0
+                    else lastItem.id + 1
+                }
                 else -> return MediatorResult.Success(true)
             }
             val response = apiService.getCarts(state.config.pageSize, skip)

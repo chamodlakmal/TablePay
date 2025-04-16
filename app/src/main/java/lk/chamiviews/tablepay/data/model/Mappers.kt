@@ -18,8 +18,7 @@ fun ProductDto.toLocalProduct(): LocalProduct {
     return LocalProduct(
         id = id,
         price = price,
-        quantity = quantity,
-        thumbnail = thumbnail
+        quantity = quantity
     )
 }
 
@@ -37,8 +36,7 @@ fun LocalProduct.toProductDto(): ProductDto {
     return ProductDto(
         id = id,
         price = price,
-        quantity = quantity,
-        thumbnail = thumbnail
+        quantity = quantity
     )
 }
 
@@ -46,8 +44,7 @@ fun LocalProduct.toDomain(): Product {
     return Product(
         id = id,
         price = price,
-        quantity = quantity,
-        thumbnail = thumbnail
+        quantity = quantity
     )
 }
 
@@ -55,8 +52,7 @@ fun Product.toLocal(): LocalProduct {
     return LocalProduct(
         id = id,
         price = price,
-        quantity = quantity,
-        thumbnail = thumbnail
+        quantity = quantity
     )
 }
 
