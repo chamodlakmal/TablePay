@@ -13,9 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import lk.chamiviews.tablepay.domain.model.Product
+import lk.chamiviews.tablepay.domain.model.ProductDetail
+import lk.chamiviews.tablepay.presentation.state.ProductDetailState
 
 @Composable
-fun ProductItem(product: Product, title: String) {
+fun ProductItem(product: Product, productDetailState: ProductDetailState) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,10 +29,24 @@ fun ProductItem(product: Product, title: String) {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Title : ${title}",
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            when (productDetailState) {
+                is ProductDetailState.Loading -> {
+                    Text(text = "Loading...")
+                }
+
+                is ProductDetailState.Success -> {
+                    Text(
+                        text = "Title : ${productDetailState.productDetail.title}",
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
+
+                is ProductDetailState.Error -> {
+                    Text(text = "Error: ${productDetailState.message}")
+                }
+
+            }
+
             Text(
                 text = "Quantity : ${product.quantity}",
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -49,5 +65,7 @@ fun ProductItemPreview() {
         price = 100.0,
         quantity = 2
     )
-    ProductItem(product = product, title = "Product Title")
+    val productDetailState =
+        ProductDetailState.Success(productDetail = ProductDetail(id = 1, title = "Product 1"))
+    ProductItem(product = product, productDetailState = productDetailState)
 }

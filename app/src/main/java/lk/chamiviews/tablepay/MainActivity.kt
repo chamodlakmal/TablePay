@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                             billDetailViewModel.productDetailState.collectAsState()
                         BillDetailScreen(
                             products = Json.decodeFromString(args.productsJson),
-                            productDetailState = productDetailsValue.value,
+                            productIdWiseProductDetailState = productDetailsValue.value,
                             onBackPress = {
                                 navController.popBackStack()
                             }, onEvent = billDetailViewModel::onEvent

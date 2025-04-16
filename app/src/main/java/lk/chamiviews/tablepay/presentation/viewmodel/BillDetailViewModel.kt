@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,9 +17,11 @@ import javax.inject.Inject
 class BillDetailViewModel @Inject constructor(
     private val getProductDetailUseCase: GetProductDetailUseCase
 ) : ViewModel() {
+    // State to hold the status of each product detail request
     private val _productDetailState =
-        MutableStateFlow<ProductDetailState>(ProductDetailState.Loading)
-    val productDetailState: StateFlow<ProductDetailState> = _productDetailState
+        MutableStateFlow<HashMap<Int, ProductDetailState>>(hashMapOf())
+    val productDetailState: StateFlow<HashMap<Int, ProductDetailState>> = _productDetailState
+
 
     fun onEvent(event: BillDetailEvent) {
         when (event) {
@@ -32,34 +33,39 @@ class BillDetailViewModel @Inject constructor(
 
     fun getProductDetails(productIds: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
-            _productDetailState.value = ProductDetailState.Loading
+            // Initialize a HashMap with 'Loading' for all products
+            val initialState = HashMap<Int, ProductDetailState>()
+            productIds.forEach { productId ->
+                initialState[productId] = ProductDetailState.Loading
+            }
+            _productDetailState.value = initialState
 
+            // Create a list of async tasks to fetch product details in parallel
             val deferredResults = productIds.map { productId ->
                 async {
-                    runCatching { getProductDetailUseCase(productId) }
+                    // Wrap each call with runCatching to handle success and failure
+                    val result = runCatching { getProductDetailUseCase(productId) }
+                    productId to result // Return productId and its result
                 }
             }
 
-            val results = deferredResults.awaitAll()
-
-            val successList = results.mapNotNull { it.getOrNull() }
-            val errorMessages = results.mapNotNull { it.exceptionOrNull()?.message }
-
-            _productDetailState.value = when {
-                successList.isNotEmpty() && errorMessages.isEmpty() -> {
-                    ProductDetailState.Success(successList)
-                }
-
-                errorMessages.isNotEmpty() -> {
-                    ProductDetailState.Error(
-                        "Some products failed to load:\n" + errorMessages.joinToString("\n")
-                    )
-                }
-
-                else -> {
-                    ProductDetailState.Error(
-                        "Failed to load products:\n" + errorMessages.joinToString("\n")
-                    )
+            // Process each result as it arrives
+            deferredResults.forEach { deferred ->
+                val (productId, result) = deferred.await()
+                result.onSuccess { productDetail ->
+                    // As soon as a request is successful, update the state for this product
+                    _productDetailState.value = _productDetailState.value.toMutableMap().apply {
+                        put(productId, ProductDetailState.Success(productDetail))
+                    } as HashMap<Int, ProductDetailState>
+                }.onFailure { exception ->
+                    // If a request fails, update the state with an error message for this product
+                    val errorMessage = exception.message ?: "Unknown error"
+                    _productDetailState.value = _productDetailState.value.toMutableMap().apply {
+                        put(
+                            productId,
+                            ProductDetailState.Error("Failed to load product $productId: $errorMessage")
+                        )
+                    } as HashMap<Int, ProductDetailState>
                 }
             }
         }
