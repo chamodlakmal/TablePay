@@ -8,7 +8,7 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import lk.chamiviews.tablepay.data.model.LocalCart
-import lk.chamiviews.tablepay.data.model.toDomain
+import lk.chamiviews.tablepay.data.mapper.toDomain
 import javax.inject.Inject
 
 @HiltViewModel

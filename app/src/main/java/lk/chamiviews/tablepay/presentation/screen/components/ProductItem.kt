@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import lk.chamiviews.tablepay.domain.model.Product
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(product: Product, title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,6 +27,10 @@ fun ProductItem(product: Product) {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Title : ${title}",
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
             Text(
                 text = "Quantity : ${product.quantity}",
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -45,5 +49,5 @@ fun ProductItemPreview() {
         price = 100.0,
         quantity = 2
     )
-    ProductItem(product = product)
+    ProductItem(product = product, title = "Product Title")
 }

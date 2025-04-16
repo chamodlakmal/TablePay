@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import lk.chamiviews.tablepay.presentation.screen.BillDetailScreen
 import lk.chamiviews.tablepay.presentation.screen.CartsScreen
+import lk.chamiviews.tablepay.presentation.viewmodel.BillDetailViewModel
 import lk.chamiviews.tablepay.presentation.viewmodel.CartViewModel
 import lk.chamiviews.tablepay.ui.theme.TablePayTheme
 
@@ -33,8 +35,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     composable<CartsScreen> {
-                        val viewModel = hiltViewModel<CartViewModel>()
-                        val carts = viewModel.cartPagingFlow.collectAsLazyPagingItems()
+                        val cartViewModel = hiltViewModel<CartViewModel>()
+                        val carts = cartViewModel.cartPagingFlow.collectAsLazyPagingItems()
                         CartsScreen(carts = carts, navigateToBillDetail = { cart ->
                             val productsJson = Json.encodeToString(cart.products)
                             navController.navigate(
@@ -43,12 +45,17 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                     composable<BillDetailScreen> {
+                        val billDetailViewModel = hiltViewModel<BillDetailViewModel>()
                         val args = it.toRoute<BillDetailScreen>()
+                        val productDetailsValue =
+                            billDetailViewModel.productDetailState.collectAsState()
                         BillDetailScreen(
                             products = Json.decodeFromString(args.productsJson),
+                            productDetailState = productDetailsValue.value,
                             onBackPress = {
                                 navController.popBackStack()
-                            })
+                            }, onEvent = billDetailViewModel::onEvent
+                        )
                     }
 
                 }

@@ -14,6 +14,9 @@ import lk.chamiviews.tablepay.data.local.CartDatabase
 import lk.chamiviews.tablepay.data.model.LocalCart
 import lk.chamiviews.tablepay.data.remote.ApiService
 import lk.chamiviews.tablepay.data.repository.CartRemoteMediator
+import lk.chamiviews.tablepay.data.repository.ProductRepositoryImpl
+import lk.chamiviews.tablepay.domain.repository.ProductRepository
+import lk.chamiviews.tablepay.domain.usecase.GetProductDetailUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -57,5 +60,13 @@ object AppModule {
             }
         )
     }
+
+    @Provides
+    fun provideProductRepository(apiService: ApiService): ProductRepository =
+        ProductRepositoryImpl(apiService)
+
+    @Provides
+    fun provideGetProductDetailUseCase(productRepository: ProductRepository): GetProductDetailUseCase =
+        GetProductDetailUseCase(productRepository)
 
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Table Pay</string>
     <string name="tables">Tables</string>
+    <string name="bill_details">Bill Details</string>
 </resources>

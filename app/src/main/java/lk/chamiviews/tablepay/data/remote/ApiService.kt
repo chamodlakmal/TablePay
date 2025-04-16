@@ -1,6 +1,7 @@
 package lk.chamiviews.tablepay.data.remote
 
 import lk.chamiviews.tablepay.data.model.CartResponse
+import lk.chamiviews.tablepay.data.model.ProductDetailDto
 import lk.chamiviews.tablepay.data.model.ProductDto
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,5 +15,5 @@ interface ApiService {
     ): CartResponse
 
     @GET("products/{id}")
-    suspend fun getProduct(@Path("id") id: Int): ProductDto
+    suspend fun getProduct(@Path("id") id: Int): ProductDetailDto
 }

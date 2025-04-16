@@ -6,7 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import lk.chamiviews.tablepay.data.local.CartDatabase
 import lk.chamiviews.tablepay.data.model.LocalCart
-import lk.chamiviews.tablepay.data.model.toLocalCart
+import lk.chamiviews.tablepay.data.mapper.toLocalCart
 import lk.chamiviews.tablepay.data.remote.ApiService
 
 @OptIn(ExperimentalPagingApi::class)
