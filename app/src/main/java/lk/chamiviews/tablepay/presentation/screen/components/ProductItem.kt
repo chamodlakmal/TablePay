@@ -77,7 +77,8 @@ fun ProductItem(
                         Text(
                             text = "Error: ${productDetailState.message}",
                             style = MaterialTheme.typography.bodyMedium.copy(color = colors.error),
-                            maxLines = 2
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                     }
                 }
