@@ -20,6 +20,8 @@ import lk.chamiviews.tablepay.domain.repository.CartRepository
 import lk.chamiviews.tablepay.domain.repository.ProductRepository
 import lk.chamiviews.tablepay.domain.usecase.GetProductDetailUseCase
 import lk.chamiviews.tablepay.domain.usecase.MarkCartAsPaidUseCase
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -28,8 +30,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
     @Provides
+    @Singleton
+    fun provideHttpClient(): OkHttpClient {
+        return OkHttpClient().newBuilder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build()
+    }
+
+    @Provides
     fun provideRetrofit(): ApiService =
         Retrofit.Builder()
+            .client(provideHttpClient())
             .baseUrl("https://dummyjson.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(ApiService::class.java)
@@ -54,7 +65,7 @@ object AppModule {
         apiService: ApiService
     ): Pager<Int, LocalCart> {
         return Pager(
-            config = PagingConfig(pageSize = 10, initialLoadSize = 10),
+            config = PagingConfig(pageSize = 10),
             remoteMediator = CartRemoteMediator(
                 cartDatabase, apiService
             ),

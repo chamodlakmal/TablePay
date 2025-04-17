@@ -27,6 +27,7 @@ couroutineTest = "1.8.0"
 kotlin-test = "2.0.0"
 roomPaging = "2.6.1"
 pagingCompose = "3.3.6"
+okhttpVersion = "5.0.0-alpha.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,8 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 paging3 = { module = "androidx.paging:paging-runtime", version.ref = "pagingCompose" }
 paging3-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 paging3-room = { module = "androidx.room:room-paging", version.ref = "roomPaging" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,6 +45,7 @@ fun BillDetailScreen(
     onEvent: (BillDetailEvent) -> Unit,
     markCartAsPaidState: MarkCartAsPaidState
 ) {
+    val listState = rememberLazyListState()
     val context = LocalContext.current
     val productIds = remember(cart.products) { cart.products.map { it.id } }
     LaunchedEffect(productIds) {
@@ -58,7 +60,7 @@ fun BillDetailScreen(
                 })
         }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            if(cart.products.isEmpty()){
+            if (cart.products.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -71,8 +73,9 @@ fun BillDetailScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-            }else{
+            } else {
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .weight(1f)
@@ -94,7 +97,13 @@ fun BillDetailScreen(
                         tonalElevation = 4.dp, shadowElevation = 4.dp
                     ) {
                         Text(
-                            text = "Total Bill Amount: ${String.format(Locale.US, "%.2f", cart.total)}",
+                            text = "Total Bill Amount: ${
+                                String.format(
+                                    Locale.US,
+                                    "%.2f",
+                                    cart.total
+                                )
+                            }",
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .fillMaxWidth()

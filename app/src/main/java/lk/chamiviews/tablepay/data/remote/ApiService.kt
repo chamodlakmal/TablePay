@@ -2,7 +2,6 @@ package lk.chamiviews.tablepay.data.remote
 
 import lk.chamiviews.tablepay.data.model.CartResponse
 import lk.chamiviews.tablepay.data.model.ProductDetailDto
-import lk.chamiviews.tablepay.data.model.ProductDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

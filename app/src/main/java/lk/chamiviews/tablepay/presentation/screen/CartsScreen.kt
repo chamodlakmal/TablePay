@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -34,6 +35,7 @@ import lk.chamiviews.tablepay.presentation.screen.components.CommonTopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart) -> Unit) {
+    val listState = rememberLazyListState()
     val context = LocalContext.current
     LaunchedEffect(key1 = carts.loadState) {
         if (carts.loadState.refresh is LoadState.Error) {
@@ -64,7 +66,9 @@ fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart)
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(
+                    innerPadding
+                )
                 .fillMaxSize()
         ) {
             when {
@@ -83,6 +87,7 @@ fun CartsScreen(carts: LazyPagingItems<Cart>, navigateToBillDetail: (cart: Cart)
 
                 else -> {
                     LazyColumn(
+                        state = listState,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp),

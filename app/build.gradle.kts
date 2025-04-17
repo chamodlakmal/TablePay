@@ -76,4 +76,6 @@ dependencies {
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.core)
     implementation(libs.bundles.paging)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 }
